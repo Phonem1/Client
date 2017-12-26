@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="Mahogany">#CD4A4A</color>
+    <color name="OutrageousOrange">#FF6E4A</color>
+    <color name="RawSienna">#D68A59</color>
 </resources>
