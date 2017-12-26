@@ -12,9 +12,12 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.anewtech.phone.client.R;
+import com.anewtech.phone.client.TouchActivity;
 import com.anewtech.phone.client.toiletFeedback.Fragments.AnswersFragment;
 import com.anewtech.phone.client.toiletFeedback.Fragments.CommonEvent;
 import com.anewtech.phone.client.toiletFeedback.Fragments.CustomActivityMessageEvent;
@@ -39,6 +42,8 @@ import com.qihancloud.opensdk.function.beans.speech.Grammar;
 import com.qihancloud.opensdk.function.unit.SpeechManager;
 import com.qihancloud.opensdk.function.unit.interfaces.speech.RecognizeListener;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -69,12 +74,11 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
 
     private SurveyBervice brain;
     private SpeechManager sm;
-    private boolean isNextQn, reading, sleeping, nextLayer = false;
+    private boolean isNextQn, reading, nextLayer = false;
 
     private EventBus myevent = EventBus.getDefault();
-    private Handler handler = new Handler();
 
-    private LovelyInfoDialog ThankYou;
+    private LovelyStandardDialog Thanks;
     private CountDownTimer timer;
 
     private FirebaseUser mUser;
@@ -118,23 +122,21 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
             questionFragment = QuestionFragment.newInstance("question");
             answersFragment = AnswersFragment.newInstance("answers");
         }
+
         addFragments();
         Logger.addLogAdapter(new AndroidLogAdapter());
 
-        this.brain = new SurveyBervice();
+        this.brain = new SurveyBervice(this);
         this.brain.loadJsonData(loadJsonFromAsset());
         this.brain.doFirst();
         thankyouguys = this.brain.doThankYou();
 
-        ThankYou = new LovelyInfoDialog(this);
+        Thanks = new LovelyStandardDialog(this);
 
         timer = new CountDownTimer(40000, 1000) {
             public void onTick(long millisUntilFinished) {
             }
             public void onFinish() {
-                //Toast.makeText(FragmentLayout.this,"Timer is up",Toast.LENGTH_SHORT).show();
-                //brain.doFirst();
-                //brain.currentQuestion();
                 if(!brain.isFirstQuestion()){
                     brain.restartQuestion();
                     myevent.post(new CustomActivityMessageEvent(1));
@@ -148,11 +150,6 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         }.start();
 
         initSpeechListener();
-
-//        mReceiver = new MyBroadcastReceiver();
-//        final IntentFilter intentFilter = new IntentFilter("checkBoolean");
-//        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, intentFilter);
-
     }
 
     @Override
@@ -201,9 +198,6 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
     public void onEvent(CommonEvent event) {
         Thread init = new Thread(getanswersfromFragment);
         init.start();
-//        if(answersFragment.getView() != null && answersFragment.isVisible()){
-//            //put thread here:
-//        }
     }
 
     @Override
@@ -215,7 +209,6 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
     @Override
     public void onResume() {
         super.onResume();
-        //this.brain.currentQuestion();
         nextLayer = false;
     }
 
@@ -244,20 +237,27 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         //Toast.makeText(this, "FragmentLayout: " + "is Last question", Toast.LENGTH_SHORT).show();
         restartTimer();
         if(this.brain.isLastQuestion()) {
-            ThankYou.setTopColorRes(R.color.Mahogany)
+            Thanks.setTopColorRes(R.color.Mahogany)
                     .setIcon(R.drawable.ic_sentiment_very_satisfied_black_48dp)
                     .setTitle("Hey you!")
                     .setMessage(thankyouguys.get(doRandom(thankyouguys.size())).message)
-                    .setConfirmButtonColor(R.color.OutrageousOrange)
-                    .setConfirmButtonText("I sure did!")
+                    .setPositiveButton("I sure did!", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                        }
+                    })
                     .show();
+
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    ThankYou.dismiss();
+                    Thanks.dismiss();
+                    finish();
                 }
             }, 5000);
+
         }
 
         if(answer.sub){
@@ -274,7 +274,6 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         }
     }
     private void restartTimer() {
-        //Toast.makeText(FragmentLayout.this,"Timer is up",Toast.LENGTH_SHORT).show();
         timer.cancel();
         timer.start();
     }
@@ -295,7 +294,8 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
                 });
             }
             if(data.getStringExtra("result").contains("finish")){
-                brain.restartQuestion();
+//                brain.restartQuestion();
+                finish();
             }
         }
 
@@ -376,35 +376,6 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         }
     }
 
-    private Runnable gettingAns = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(4000); // wait for question to be read
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(answ != null){
-                readAnswer:
-                for(String ans : answ){
-//                    speechService.readAnswer(ans);
-                    toLog(ans);
-//                toLog("Is next question? "+String.valueOf(isNextQn));
-                    try {
-                        Thread.sleep(1500); // interval between each answer when read
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if(isNextQn /* trigger to stop loop */){
-                        toLog("reading...break loop triggered");
-                        break readAnswer;
-                    }
-                }
-                sm.doWakeUp();
-            }
-        }
-    };
-
     private Runnable getanswersfromFragment = new Runnable() {
         @Override
         public void run() {
@@ -448,8 +419,6 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
     public interface SendDataToFragment {
         void passDataArrayList(ArrayList<String> list, String inputSpeech);
     }
-
-//    MyBroadcastReceiver mReceiver; // not in use at the moment!
 
     public class MyBroadcastReceiver extends BroadcastReceiver {
 

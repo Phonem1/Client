@@ -1,5 +1,11 @@
 package com.anewtech.phone.client.toiletFeedback.Services;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+
 import com.anewtech.phone.client.toiletFeedback.Models.data.Answer;
 import com.anewtech.phone.client.toiletFeedback.Models.data.FinalMessage;
 import com.anewtech.phone.client.toiletFeedback.Models.data.Question;
@@ -38,6 +44,11 @@ public class SurveyDataService {
     public SurveyDataService() {
         g = new Gson();
         this.toLog(this.getClass().toString());
+    }
+
+    public SurveyDataService(FragmentActivity activity) {
+        g = new Gson();
+        sm = ViewModelProviders.of(activity).get(SurveyDataModel.class);
     }
 
     public String getJson() {

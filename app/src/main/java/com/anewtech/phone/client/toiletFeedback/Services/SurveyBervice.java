@@ -1,5 +1,7 @@
 package com.anewtech.phone.client.toiletFeedback.Services;
 
+import android.support.v4.app.FragmentActivity;
+
 import com.anewtech.phone.client.toiletFeedback.Fragments.CommonEvent;
 import com.anewtech.phone.client.toiletFeedback.Models.reports.SurveyAnswerReport;
 import com.anewtech.phone.client.toiletFeedback.Models.services.Answernaire;
@@ -29,8 +31,13 @@ public class SurveyBervice {
     private boolean LOG_ON_BERVICE = true;
     private Questionaire myque = new Questionaire();
 
-    public SurveyBervice(){
-        this.sds = new SurveyDataService();
+//    public SurveyBervice(){
+//        this.sds = new SurveyDataService();
+//        this.srs = new SurveyReportService();
+//    }
+
+    public SurveyBervice(FragmentActivity activity) {
+        this.sds = new SurveyDataService(activity);
         this.srs = new SurveyReportService();
     }
 

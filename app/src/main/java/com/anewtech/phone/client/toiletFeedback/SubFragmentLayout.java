@@ -146,7 +146,7 @@ public class SubFragmentLayout
         // To call onServiceConnected() if the service already started
         bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
 
-        this.brain = new SurveyBervice();
+        this.brain = new SurveyBervice(this);
         this.brain.loadJsonData(loadJsonFromAsset());
 
         tvSubQue = findViewById(R.id.subQuestion);
