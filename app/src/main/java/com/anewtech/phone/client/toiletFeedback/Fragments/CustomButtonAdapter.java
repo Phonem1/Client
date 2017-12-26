@@ -24,11 +24,10 @@ public class CustomButtonAdapter extends BaseAdapter{
     private int icon;
     LayoutInflater inflater;
 
-    public CustomButtonAdapter(Context c, List<Answernaire> textToGenerate, int icon)
+    public CustomButtonAdapter(Context c, List<Answernaire> textToGenerate)
     {
         this.context = c;
         this.textToGenerate = textToGenerate;
-        this.icon = icon;
         inflater = (LayoutInflater.from(c));
     }
     @Override
@@ -50,8 +49,6 @@ public class CustomButtonAdapter extends BaseAdapter{
     public View getView(int i, View view, ViewGroup viewGroup) {
         view = inflater.inflate(R.layout.fragment_answer_detail, null);
         TextView tv = view.findViewById(R.id.answertext);
-        ImageView iv = view.findViewById(R.id.answerimage);
-        iv.setImageResource(this.icon);
         tv.setText(this.textToGenerate.get(i).answer);
         return view;
 //        View gridview;

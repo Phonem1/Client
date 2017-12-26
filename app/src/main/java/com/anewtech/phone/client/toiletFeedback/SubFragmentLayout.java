@@ -192,7 +192,7 @@ public class SubFragmentLayout
             public void run() {onQuestionPass(currentque.question);
             } // pass to speechmanager
         }, 1000); //
-        cba = new CustomButtonAdapter(this, currentque.answers, icon);
+        cba = new CustomButtonAdapter(this, currentque.answers);
         answers = currentque.answers;
         Thread readAns = new Thread(getAns);
         readAns.start();
@@ -210,7 +210,7 @@ public class SubFragmentLayout
                     tvSubQue.setText(currentque.question);
                     onQuestionPass(currentque.question);
                     ((CustomButtonAdapter) gv.getAdapter()).notifyDataSetChanged();
-                    cba = new CustomButtonAdapter(SubFragmentLayout.this, currentque.answers, icon);
+                    cba = new CustomButtonAdapter(SubFragmentLayout.this, currentque.answers);
                     answ = new ArrayList<>();
                     Thread readAns = new Thread(getAns);
                     readAns.start();

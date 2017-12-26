@@ -123,7 +123,7 @@ public class AnswersFragment extends Fragment implements FragmentLayout.SendData
         localAnswers = mevent.getMessage().answers;
 
         gv.setNumColumns(event.getMessage().answers.size());
-        CustomButtonAdapter cba = new CustomButtonAdapter(this.getContext(),mevent.getMessage().answers,icon);
+        CustomButtonAdapter cba = new CustomButtonAdapter(this.getContext(),mevent.getMessage().answers);
         gv.setAdapter(cba);
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
