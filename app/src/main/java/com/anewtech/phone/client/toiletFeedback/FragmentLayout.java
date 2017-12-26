@@ -337,7 +337,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
     public void onQuestionPass(String question) {
         sm.doSleep();
         sm.stopSpeak();
-        if(!nextLayer){
+        if(!nextLayer && question != null){
             speechService.readQuestion(question);
         }
     }
