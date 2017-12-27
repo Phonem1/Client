@@ -72,6 +72,7 @@ public class SubFragmentLayout
     private ArrayList<String> answ = new ArrayList<>();
     private int indexofque = -1;
     private String answerpos = "";
+    private String filename;
     private int countdown = 0;
     private boolean thisLayer;
 
@@ -137,6 +138,7 @@ public class SubFragmentLayout
             frgLayout.passBoolean(false);
             finish();
         }
+        filename = bundle.getString("asset");
 
         sm = (SpeechManager) getUnitManager(FuncConstant.SPEECH_MANAGER);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -259,7 +261,7 @@ public class SubFragmentLayout
     private String loadJsonFromAsset() {
         String json = null;
         try {
-            InputStream is = getAssets().open("survey.json");
+            InputStream is = getAssets().open(filename+".json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

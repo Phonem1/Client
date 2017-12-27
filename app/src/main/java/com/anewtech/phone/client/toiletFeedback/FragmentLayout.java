@@ -87,6 +87,8 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
     private Intent serviceIntent;
     public SpeechService speechService;
 
+    private String filename;
+
     ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -107,6 +109,9 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_layout);
 
+        Bundle bundle = getIntent().getExtras();
+        filename = bundle.getString("asset");
+
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
 
@@ -122,6 +127,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
             questionFragment = QuestionFragment.newInstance("question");
             answersFragment = AnswersFragment.newInstance("answers");
         }
+
 
         addFragments();
         Logger.addLogAdapter(new AndroidLogAdapter());
@@ -264,6 +270,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
             try {
                 Intent intent = new Intent(this,SubFragmentLayout.class);
                 intent.putExtra("choice", answer.answerid);
+                intent.putExtra("asset", filename);
                 startActivityForResult( intent, 2);
             } catch (ClassCastException cce) {
 
@@ -314,7 +321,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
     private String loadJsonFromAsset() {
         String json = null;
         try{
-            InputStream is = getAssets().open("survey.json");
+            InputStream is = getAssets().open(filename+".json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

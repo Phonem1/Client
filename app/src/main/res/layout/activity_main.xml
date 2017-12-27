@@ -7,6 +7,7 @@
     tools:context="com.anewtech.phone.client.MainActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
@@ -14,5 +15,36 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/quiz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="38dp"
+        android:onClick="launchQuiz"
+        android:text="quiz"
+        app:layout_constraintStart_toEndOf="@+id/survey"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/survey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="39dp"
+        android:onClick="launchSurvey"
+        android:text="survey"
+        app:layout_constraintBaseline_toBaselineOf="@+id/quiz"
+        app:layout_constraintEnd_toStartOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/toiletFB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:onClick="launchToiletFeedback"
+        android:text="toilet feedback"
+        app:layout_constraintBaseline_toBaselineOf="@+id/quiz"
+        app:layout_constraintStart_toEndOf="@+id/quiz" />
 
 </android.support.constraint.ConstraintLayout>
