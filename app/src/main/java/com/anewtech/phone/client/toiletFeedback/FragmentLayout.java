@@ -109,8 +109,11 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_layout);
 
+        // Get filename for app
         Bundle bundle = getIntent().getExtras();
-        filename = bundle.getString("asset");
+        if (bundle.getString("asset") != null){
+            filename = bundle.getString("asset");
+        }
 
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
@@ -128,11 +131,10 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
             answersFragment = AnswersFragment.newInstance("answers");
         }
 
-
         addFragments();
         Logger.addLogAdapter(new AndroidLogAdapter());
 
-        this.brain = new SurveyBervice(this);
+        this.brain = new SurveyBervice();
         this.brain.loadJsonData(loadJsonFromAsset());
         this.brain.doFirst();
         thankyouguys = this.brain.doThankYou();
@@ -146,6 +148,8 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
                 if(!brain.isFirstQuestion()){
                     brain.restartQuestion();
                     myevent.post(new CustomActivityMessageEvent(1));
+                }else {
+                    finish();
                 }
                 try{
                     timer.start();
@@ -185,6 +189,21 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        nextLayer = false;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (timer != null){
+            timer.cancel();
+        }
+        nextLayer = true;
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         mAuth.signOut();
@@ -213,12 +232,6 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        nextLayer = false;
-    }
-
-    @Override
     protected void onMainServiceConnected() {
 
     }
@@ -229,13 +242,6 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         ft.add(R.id.questions_holder, questionFragment);
         ft.add(R.id.answers_holder, answersFragment);
         ft.commit();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        nextLayer = true;
     }
 
     @Override

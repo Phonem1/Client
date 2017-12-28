@@ -46,11 +46,6 @@ public class SurveyDataService {
         this.toLog(this.getClass().toString());
     }
 
-    public SurveyDataService(FragmentActivity activity) {
-        g = new Gson();
-        sm = ViewModelProviders.of(activity).get(SurveyDataModel.class);
-    }
-
     public String getJson() {
         return this.jsonData;
     }

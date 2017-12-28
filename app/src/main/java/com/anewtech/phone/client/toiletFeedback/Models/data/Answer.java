@@ -6,7 +6,7 @@ import android.arch.lifecycle.ViewModel;
  * Created by heriz on 26/12/2017.
  */
 
-public class Answer extends ViewModel{
+public class Answer {
     public String id;
     public String message;
     public boolean sub;

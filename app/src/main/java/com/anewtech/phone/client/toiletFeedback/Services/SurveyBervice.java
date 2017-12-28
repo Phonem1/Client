@@ -31,15 +31,15 @@ public class SurveyBervice {
     private boolean LOG_ON_BERVICE = true;
     private Questionaire myque = new Questionaire();
 
-//    public SurveyBervice(){
-//        this.sds = new SurveyDataService();
-//        this.srs = new SurveyReportService();
-//    }
-
-    public SurveyBervice(FragmentActivity activity) {
-        this.sds = new SurveyDataService(activity);
+    public SurveyBervice(){
+        this.sds = new SurveyDataService();
         this.srs = new SurveyReportService();
     }
+
+//    public SurveyBervice(FragmentActivity activity) {
+//        this.sds = new SurveyDataService(activity);
+//        this.srs = new SurveyReportService();
+//    }
 
     public void loadJsonData(String myjson){
         this.sds.setJson(myjson);
@@ -94,7 +94,7 @@ public class SurveyBervice {
     }
 
     public boolean isFirstQuestion() {
-        if(this.currentIndex == 0){
+        if(this.currentIndex == 1){
             return true;
         }
         return false;

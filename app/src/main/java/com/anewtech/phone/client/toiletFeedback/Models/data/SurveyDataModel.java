@@ -8,7 +8,7 @@ import java.util.List;
  * Created by heriz on 26/12/2017.
  */
 
-public class SurveyDataModel extends ViewModel {
+public class SurveyDataModel {
     public String version;
     public String title;
     public String datetime;

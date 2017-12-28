@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -73,10 +74,62 @@ public class SubFragmentLayout
     private int indexofque = -1;
     private String answerpos = "";
     private String filename;
-    private int countdown = 0;
+    private CountDownTimer timer;
     private boolean thisLayer;
 
     private int icon = R.drawable.ic_sentiment_satisfied_black_48dp;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_subquestionaire_layout);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle.getString("choice") != null) {
+            answerpos = bundle.getString("choice");
+        } else {
+            frgLayout.passBoolean(false);
+            finish();
+        }
+        if (bundle.getString("asset") != null) {
+            filename = bundle.getString("asset");
+        }
+
+        sm = (SpeechManager) getUnitManager(FuncConstant.SPEECH_MANAGER);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        serviceIntent = new Intent(this, SpeechService.class);
+        serviceIntent.setPackage(getPackageName());
+        // To call onServiceConnected() if the service already started
+        bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+
+        this.brain = new SurveyBervice();
+        this.brain.loadJsonData(loadJsonFromAsset());
+
+        tvSubQue = findViewById(R.id.subQuestion);
+        gv = findViewById(R.id.subAnswersGrid);
+        tvSubQue = findViewById(R.id.subQuestion);
+        gv.setNumColumns(3);
+
+        //this.brain.doFirst();
+        doSub();
+        currentSubQuestion();
+        populate();
+
+        timer = new CountDownTimer(40000, 1000) {
+            @Override
+            public void onTick(long l) {}
+
+            @Override
+            public void onFinish() {
+                if (!brain.isLastQuestion()){
+                    normalFinish();
+                }else {
+                    finishHim();
+                }
+            }
+        }.start();
+    }
 
     @Override
     protected void onStart() {
@@ -84,6 +137,12 @@ public class SubFragmentLayout
         thisLayer = true;
         startService(serviceIntent);
         myevent.register(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //populate();
     }
 
     @Override
@@ -96,6 +155,9 @@ public class SubFragmentLayout
         }
         stopService(serviceIntent);
         myevent.unregister(this);
+        if (timer != null){
+            timer.cancel();
+        }
     }
 
     @Override
@@ -127,43 +189,6 @@ public class SubFragmentLayout
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subquestionaire_layout);
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle.getString("choice") != null) {
-            answerpos = bundle.getString("choice");
-        } else {
-            frgLayout.passBoolean(false);
-            finish();
-        }
-        filename = bundle.getString("asset");
-
-        sm = (SpeechManager) getUnitManager(FuncConstant.SPEECH_MANAGER);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        serviceIntent = new Intent(this, SpeechService.class);
-        serviceIntent.setPackage(getPackageName());
-        // To call onServiceConnected() if the service already started
-        bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
-
-        this.brain = new SurveyBervice(this);
-        this.brain.loadJsonData(loadJsonFromAsset());
-
-        tvSubQue = findViewById(R.id.subQuestion);
-        gv = findViewById(R.id.subAnswersGrid);
-        tvSubQue = findViewById(R.id.subQuestion);
-        gv.setNumColumns(3);
-
-        //this.brain.doFirst();
-        doSub();
-        currentSubQuestion();
-        populate();
-
-    }
-
-    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
@@ -191,8 +216,7 @@ public class SubFragmentLayout
         tvSubQue.setText(currentque.question);
         handler.postDelayed(new Runnable() {
             @Override
-            public void run() {onQuestionPass(currentque.question);
-            } // pass to speechmanager
+            public void run() {onQuestionPass(currentque.question);} // pass to speechmanager
         }, 1000); //
         cba = new CustomButtonAdapter(this, currentque.answers);
         answers = currentque.answers;
@@ -251,12 +275,6 @@ public class SubFragmentLayout
             }
         }
     };
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //populate();
-    }
 
     private String loadJsonFromAsset() {
         String json = null;

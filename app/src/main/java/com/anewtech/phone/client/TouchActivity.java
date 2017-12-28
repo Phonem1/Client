@@ -21,7 +21,7 @@ import java.util.Map;
 public class TouchActivity extends AppCompatActivity {
 
     HashMap<String,String> appMap;
-    String filename;
+    String filename, appCode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,7 +31,9 @@ public class TouchActivity extends AppCompatActivity {
         initAppMap();
 
         Bundle bundle = getIntent().getExtras();
-        String appCode = bundle.getString("appCode");
+        if (bundle.getString("appCode") != null) {
+            appCode = bundle.getString("appCode");
+        }
 
         for(Map.Entry<String,String> entry : appMap.entrySet()){
             if(entry.getKey().equals(appCode)){
