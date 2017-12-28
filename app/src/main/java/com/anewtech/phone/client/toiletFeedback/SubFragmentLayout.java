@@ -77,7 +77,7 @@ public class SubFragmentLayout
     private CountDownTimer timer;
     private boolean thisLayer;
 
-    private int icon = R.drawable.ic_sentiment_satisfied_black_48dp;
+//    private int icon = R.drawable.ic_sentiment_satisfied_black_48dp;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -247,6 +247,56 @@ public class SubFragmentLayout
         });
     }
 
+    @Override   /* Voice over for 2nd layer questions */
+    public void onQuestionPass(String question) {
+        sm.stopSpeak();
+        if(thisLayer){
+            speechService.readQuestion(question);
+        }
+    }
+
+    /* Voice over for 2nd layer answers and listener to perform click programmatically */
+    public void answerListener(ArrayList<String> arrayList) {
+        final ArrayList<String> answer = arrayList;
+        sm.setOnSpeechListener(new RecognizeListener() {
+            @Override
+            public boolean onRecognizeResult(Grammar grammar) {
+                String inputSpeech = wordFirstCap(grammar.getText());
+                toLog("speech: " + inputSpeech);
+                toLog("answ size: " + answer.size());
+                for (int i = 0; i < answer.size(); i++) {
+                    toLog(answer.get(i));
+                    if (inputSpeech.contains(answer.get(i))) {
+                        gv.performItemClick(gv.getChildAt(i), i, gv.getItemIdAtPosition(i));
+                        break;
+                    }
+                }
+                return true;
+            }
+
+            @Override
+            public void onRecognizeVolume(int i) {
+
+            }
+        });
+    }
+    public String wordFirstCap(String str) {
+        String[] words = str.trim().split(" ");
+        StringBuilder ret = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].trim().length() > 0) {
+//                Log.e("words[i].trim",""+words[i].trim().charAt(0));
+                ret.append(Character.toUpperCase(words[i].trim().charAt(0)));
+                ret.append(words[i].trim().substring(1));
+                if (i < words.length - 1) {
+                    ret.append(' ');
+                }
+            }
+        }
+
+        return ret.toString();
+    }
+
     private Runnable getAns = new Runnable() {
         @Override
         public void run() {
@@ -313,57 +363,6 @@ public class SubFragmentLayout
         if (LOG_ON_ACTIVITY_LIFECYCLE) {
             Logger.e("Survey(sfl) :" + msg);
         }
-    }
-
-    @Override   /* Voice over for 2nd layer questions */
-    public void onQuestionPass(String question) {
-        sm.stopSpeak();
-        if(thisLayer){
-            speechService.readQuestion(question);
-        }
-    }
-
-    /* Voice over for 2nd layer answers and listener to perform click programmatically */
-    public void answerListener(ArrayList<String> arrayList) {
-        final ArrayList<String> answer = arrayList;
-        sm.setOnSpeechListener(new RecognizeListener() {
-            @Override
-            public boolean onRecognizeResult(Grammar grammar) {
-                String inputSpeech = wordFirstCap(grammar.getText());
-                toLog("speech: " + inputSpeech);
-                toLog("answ size: " + answer.size());
-                for (int i = 0; i < answer.size(); i++) {
-                    toLog(answer.get(i));
-                    if (inputSpeech.contains(answer.get(i))) {
-                        gv.performItemClick(gv.getChildAt(i), i, gv.getItemIdAtPosition(i));
-                        break;
-                    }
-                }
-                return true;
-            }
-
-            @Override
-            public void onRecognizeVolume(int i) {
-
-            }
-        });
-    }
-
-    public String wordFirstCap(String str) {
-        String[] words = str.trim().split(" ");
-        StringBuilder ret = new StringBuilder();
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].trim().length() > 0) {
-//                Log.e("words[i].trim",""+words[i].trim().charAt(0));
-                ret.append(Character.toUpperCase(words[i].trim().charAt(0)));
-                ret.append(words[i].trim().substring(1));
-                if (i < words.length - 1) {
-                    ret.append(' ');
-                }
-            }
-        }
-
-        return ret.toString();
     }
 
 }

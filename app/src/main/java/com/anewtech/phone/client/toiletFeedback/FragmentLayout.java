@@ -294,21 +294,23 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode == 2){
-            if(data.getStringExtra("result").contains("normal")){
-                // Toast.makeText(this, data.getStringExtra("result"), Toast.LENGTH_SHORT).show();
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        brain.nextQuestion();
-                        brain.currentQuestion();
-                        restartTimer();
-                    }
-                });
-            }
-            if(data.getStringExtra("result").contains("finish")){
+        if (data != null ){
+            if(requestCode == 2){
+                if(data.getStringExtra("result").contains("normal")){
+                    // Toast.makeText(this, data.getStringExtra("result"), Toast.LENGTH_SHORT).show();
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            brain.nextQuestion();
+                            brain.currentQuestion();
+                            restartTimer();
+                        }
+                    });
+                }
+                if(data.getStringExtra("result").contains("finish")){
 //                brain.restartQuestion();
-                finish();
+                    finish();
+                }
             }
         }
 
