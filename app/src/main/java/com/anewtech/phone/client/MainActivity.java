@@ -13,11 +13,12 @@ Runnable runnable;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        runnable = new runnable() {
+        handler = new Handler();
+        runnable = new Runnable() {
             public void run() {
-                Intent intent = new Intent(this, SplashScreen.class);
-
+                Intent intent = new Intent(MainActivity.this, SplashScreen.class);
                 startActivity(intent);
+                finish();
             }
         };
         handler.postDelayed(runnable,6000);
