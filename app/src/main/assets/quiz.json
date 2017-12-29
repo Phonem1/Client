@@ -66,9 +66,9 @@
     {
       "id": "001",
       "message": "01: Lion City",
-      "sub": "false", // this activates 2nd layer
-      "questionid": "001", // which question does this belongs to
-      "seq": "0" // the sequence for this answer in that particular question
+      "sub": "false",
+      "questionid": "001",
+      "seq": "0"
     }, {
       "id": "002",
       "message": "02: Dragon City",

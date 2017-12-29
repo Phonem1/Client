@@ -14,7 +14,7 @@
         android:contentDescription="@string/app_name"
         android:gravity="center"
         android:linksClickable="true"
-        android:onClick="menu"
+        android:onClick="stopIdle"
         android:src="@drawable/ic_sentiment_satisfied_black_48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

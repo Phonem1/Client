@@ -4,48 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.anewtech.phone.client.MainActivity">
+    tools:context="com.anewtech.phone.client.MenuActivity.MainActivity"
+    tools:layout_editor_absoluteY="25dp">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="105dp"
+        android:layout_height="31dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="89dp"
+        android:gravity="center"
         android:text="Menu"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/quiz"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="32dp"
-        android:onClick="launchQuiz"
-        android:text="quiz"
-        app:layout_constraintStart_toEndOf="@+id/survey"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="138dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
-    <Button
-        android:id="@+id/survey"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        android:onClick="launchSurvey"
-        android:text="survey"
-        app:layout_constraintBaseline_toBaselineOf="@+id/quiz"
-        app:layout_constraintEnd_toStartOf="@+id/textView" />
+        <Button
+            android:id="@+id/quiz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="launchQuiz"
+            android:text="quiz"
+            app:layout_constraintStart_toEndOf="@+id/survey"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <Button
-        android:id="@+id/toiletFB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="33dp"
-        android:onClick="launchToiletFeedback"
-        android:text="toilet feedback"
-        app:layout_constraintBaseline_toBaselineOf="@+id/quiz"
-        app:layout_constraintStart_toEndOf="@+id/quiz" />
+        <Button
+            android:id="@+id/survey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="launchSurvey"
+            android:text="survey"
+            tools:layout_editor_absoluteX="11dp" />
+
+        <Button
+            android:id="@+id/toiletFB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="launchToiletFeedback"
+            android:text="toilet feedback" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
