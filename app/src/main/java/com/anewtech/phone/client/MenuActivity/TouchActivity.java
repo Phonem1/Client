@@ -1,13 +1,15 @@
-package com.anewtech.phone.client.SurveyActivity;
+package com.anewtech.phone.client.MenuActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.Touch;
 import android.view.View;
 import android.widget.TextView;
 
 import com.anewtech.phone.client.R;
+import com.anewtech.phone.client.SurveyActivity.FragmentLayout;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +55,12 @@ public class TouchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // can use switch case to start different programs based on item clicked in menu
-                Intent intent = new Intent(TouchActivity.this, FragmentLayout.class);
+                Intent intent;
+                if(filename.equals("quiz")){
+                    intent = new Intent(TouchActivity.this, com.anewtech.phone.client.QuizActivity.FragmentLayout.class);
+                }else{
+                    intent = new Intent(TouchActivity.this, FragmentLayout.class);
+                }
                 intent.putExtra("asset", filename);
                 startActivity(intent);
             }

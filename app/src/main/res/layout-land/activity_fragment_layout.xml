@@ -9,9 +9,9 @@
 
     <android.support.v4.widget.Space
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:layout_margin="5px"/>
+        android:layout_height="25dp"
+        android:layout_margin="5px"
+        android:layout_weight="3" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -22,9 +22,9 @@
 
     <android.support.v4.widget.Space
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:layout_margin="5px"/>
+        android:layout_height="213dp"
+        android:layout_margin="5px"
+        android:layout_weight="3" />
 
     <FrameLayout
         android:layout_width="match_parent"

@@ -15,7 +15,7 @@
         android:gravity="center"
         android:linksClickable="true"
         android:onClick="stopIdle"
-        android:src="@drawable/ic_sentiment_satisfied_black_48dp"
+        android:src="@drawable/questionnaire"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

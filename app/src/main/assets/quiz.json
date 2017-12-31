@@ -19,6 +19,7 @@
       "multi": "true",
       "templateid": "001",
       "answerid": "",
+      "correctAnswerid": "001",
       "seq": "0"
     },
     {
@@ -27,6 +28,7 @@
       "multi": "true",
       "templateid": "001",
       "answerid": "",
+      "correctAnswerid": "006",
       "seq": "1"
     },
     {
@@ -35,6 +37,7 @@
       "multi": "true",
       "templateid": "001",
       "answerid": "",
+      "correctAnswerid": "009",
       "seq": "2"
     },
     {
@@ -43,6 +46,7 @@
       "multi": "true",
       "templateid": "001",
       "answerid": "",
+      "correctAnswerid": "011",
       "seq": "3"
     },
     {
@@ -51,6 +55,7 @@
       "multi": "true",
       "templateid": "001",
       "answerid": "",
+      "correctAnswerid": "018",
       "seq": "4"
     },
     {
@@ -59,6 +64,7 @@
       "multi": "true",
       "templateid": "001",
       "answerid": "",
+      "correctAnswerid": "020",
       "seq": "5"
     }
   ],
