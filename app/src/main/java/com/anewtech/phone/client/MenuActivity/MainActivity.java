@@ -6,11 +6,14 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.Touch;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.anewtech.phone.client.R;
+import com.qihancloud.opensdk.base.TopBaseActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends TopBaseActivity {
 
     MenuViewModel mViewModel;
 
@@ -19,16 +22,17 @@ public class MainActivity extends AppCompatActivity {
     CountDownTimer timer;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mViewModel = ViewModelProviders.of(this).get(MenuViewModel.class);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        mViewModel = ViewModelProviders.of(this).get(MenuViewModel.class);
         if(mViewModel.initialSplash) {
             setContentView(R.layout.splash);
             mViewModel.initialSplash = false;
             handler = new Handler();
-            handler.postDelayed(menuActivity(), 1000);
+            handler.postDelayed(menuActivity(), 10009);
         }else{
             setLayout("menu");
         }
@@ -47,9 +51,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         cancelTimer();
+    }
+
+    @Override
+    protected void onMainServiceConnected() {
+
     }
 
     public Runnable menuActivity(){
@@ -100,6 +109,12 @@ public class MainActivity extends AppCompatActivity {
     public void launchToiletFeedback(View view){
         Intent intent = new Intent(this, TouchActivity.class);
         intent.putExtra("appCode", "toilet feedback");
+        startActivity(intent);
+    }
+
+    public void launchFunApp(View view){
+        Intent intent = new Intent(MainActivity.this, TouchActivity.class);
+        intent.putExtra("appCode", "fun");
         startActivity(intent);
     }
 

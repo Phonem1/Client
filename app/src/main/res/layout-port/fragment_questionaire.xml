@@ -19,10 +19,11 @@
         android:textSize="40dp"/>
 
     <TextView
+        android:id="@+id/mainQuestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/mainQuestion"
-        android:textSize="40dp"
-        android:text="What is the question?"/>
+        android:gravity="center"
+        android:text="What is the question?"
+        android:textSize="40dp" />
 
 </LinearLayout>

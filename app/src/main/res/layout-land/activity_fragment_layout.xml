@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/activity_fragment">
+    android:id="@+id/activity_fragment"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp">
 
     <android.support.v4.widget.Space
         android:layout_width="match_parent"

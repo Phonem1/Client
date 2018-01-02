@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -65,7 +66,7 @@ import static org.greenrobot.eventbus.ThreadMode.MAIN;
 
 public class FragmentLayout extends TopBaseActivity implements FragmentToActivityInterface, QuestionFragment.OnQuestionPass{
 
-    private final static boolean LOG_ON_ACTIVITY_LIFECYCLE = false;
+    private final static boolean LOG_ON_ACTIVITY_LIFECYCLE = true;
 
     private QuestionFragment questionFragment;
     private AnswersFragment answersFragment;
@@ -100,13 +101,13 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         public void onServiceConnected(ComponentName name, IBinder service) {
             SpeechService.MyBinder binder = (SpeechService.MyBinder) service;
             speechService = binder.getService();
-            Log.e("xxx", "[MainActivity]: onServiceConnected()");
+//            Log.e("xxx", "[MainActivity]: onServiceConnected()");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             speechService    = null;
-            Log.e("xxx", "[MainActivity]: onServiceDisconnected()");
+//            Log.e("xxx", "[MainActivity]: onServiceDisconnected()");
         }
     };
 
@@ -284,10 +285,12 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    String msg = thankyouguys.get(doRandom(thankyouguys.size())).message
+                            +"\nYou got "+"<b>"+getFinalScore()+"</b>"+" questions right!";
                     Thanks.setTopColorRes(R.color.Mahogany)
                             .setIcon(R.drawable.ic_sentiment_very_satisfied_black_48dp)
                             .setTitle("Hey you!")
-                            .setMessage(thankyouguys.get(doRandom(thankyouguys.size())).message+"\nYou got "+getFinalScore()+"!")
+                            .setMessage(Html.fromHtml(msg))
                             .setPositiveButton("I sure did!", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -331,6 +334,9 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
                 String inputID = checkAnswer.get(1);
                 if(correctID.equals(inputID)){
                     updateScore(1);
+                    toLog("Answer chosen correct! Score: "+getFinalScore());
+                }else{
+                    toLog("Answer chosen is wrong! Score: "+getFinalScore());
                 }
             }
 
@@ -419,7 +425,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
 
     private void toLog(String msg) {
         if(LOG_ON_ACTIVITY_LIFECYCLE){
-            Logger.e("Survey(fl) :" + msg);
+            Logger.d("Quiz(fl) :" + msg);
         }
     }
 
@@ -475,7 +481,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
                 answRef = answ;
                 speechService.setNextQuestion(isNextQn);
             }
-            Log.e("xxx", "[FragmentLayout]: check if reading answers...");
+//            Log.e("xxx", "[FragmentLayout]: check if reading answers...");
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -487,7 +493,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
 //                Toast.makeText(this, mytext.answer, Toast.LENGTH_SHORT).show();
                 answ.add(mytext.answer)  ;
             }
-            Log.e("xxx", "[FragmentLayout] nextLayer: "+nextLayer);
+//            Log.e("xxx", "[FragmentLayout] nextLayer: "+nextLayer);
             if(!nextLayer){
                 speechService.setAnsList(answ);
             }
@@ -522,9 +528,9 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
     }
 
     public void passBoolean(boolean passBoolean){
-        Log.e("xxx", "[FragmentLayout] PassBoolean: "+passBoolean);
+//        Log.e("xxx", "[FragmentLayout] PassBoolean: "+passBoolean);
         this.nextLayer = passBoolean;
-        Log.e("xxx", "[FragmentLayout] PassedNextLayer: "+nextLayer);
+//        Log.e("xxx", "[FragmentLayout] PassedNextLayer: "+nextLayer);
     }
 
 }

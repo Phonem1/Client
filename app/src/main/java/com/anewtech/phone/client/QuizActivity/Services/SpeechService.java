@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 public class SpeechService extends BindBaseService implements Runnable{
 
-    private boolean LOG_ON_SPEECH_SERVICE   = true  ;
+    private boolean LOG_ON_SPEECH_SERVICE   = false ;
     private SpeechManager   sm                      ;
     private boolean         isInterrupted   = false ;
     private boolean         nextQuestion    = false ;

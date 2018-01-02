@@ -62,6 +62,14 @@
             android:layout_weight="1"
             android:onClick="launchToiletFeedback"
             android:text="toilet feedback" />
+
+        <Button
+            android:id="@+id/fun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="launchFunApp"
+            android:text="Fun!" />
     </LinearLayout>
 
 </android.support.v7.widget.LinearLayoutCompat>

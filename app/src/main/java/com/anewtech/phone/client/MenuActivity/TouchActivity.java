@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.text.method.Touch;
 import android.view.View;
 import android.widget.TextView;
@@ -50,21 +51,23 @@ public class TouchActivity extends AppCompatActivity {
             }
         }
 
-        TextView touchTV = findViewById(R.id.touch_tv);
-        touchTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // can use switch case to start different programs based on item clicked in menu
-                Intent intent;
-                if(filename.equals("quiz")){
-                    intent = new Intent(TouchActivity.this, com.anewtech.phone.client.QuizActivity.FragmentLayout.class);
-                }else{
-                    intent = new Intent(TouchActivity.this, FragmentLayout.class);
+        LinearLayoutCompat touchLayout = findViewById(R.id.touchLayout);
+        if(!appCode.equals("fun")){
+            touchLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // can use switch case to start different programs based on item clicked in menu
+                    Intent intent;
+                    if(filename.equals("quiz")){
+                        intent = new Intent(TouchActivity.this, com.anewtech.phone.client.QuizActivity.FragmentLayout.class);
+                    }else{
+                        intent = new Intent(TouchActivity.this, FragmentLayout.class);
+                    }
+                    intent.putExtra("asset", filename);
+                    startActivity(intent);
                 }
-                intent.putExtra("asset", filename);
-                startActivity(intent);
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -79,11 +82,13 @@ public class TouchActivity extends AppCompatActivity {
         appMap.put("survey","survey");
         appMap.put("quiz","quiz");
         appMap.put("toilet feedback", "toilet_feedback");
+//        appMap.put("fun", "coming soon");
 
         //name of app to their info
         infoMap = new HashMap<>();
         infoMap.put("survey","This is a survey test");
         infoMap.put("quiz","Are you ready to see how much you know about Singapore?");
         infoMap.put("toilet feedback","Would you like to give feedback to our public toilets?");
+        infoMap.put("fun", "Coming soon!");
     }
 }
