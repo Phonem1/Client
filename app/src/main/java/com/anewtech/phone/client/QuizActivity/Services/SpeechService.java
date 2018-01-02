@@ -21,12 +21,13 @@ import java.util.Arrays;
 public class SpeechService extends BindBaseService implements Runnable{
 
     private boolean LOG_ON_SPEECH_SERVICE   = true  ;
-    private SpeechManager sm                      ;
+    private SpeechManager   sm                      ;
     private boolean         isInterrupted   = false ;
     private boolean         nextQuestion    = false ;
     private boolean         isReadingAns    = false ;
     private boolean         isReadingQue    = false ;
     private boolean         isSleeping      = false ;
+    public  boolean         speak           = true  ;
     private double          questionDelay   = 0     ;
     private double          answerDelay     = 0     ;
     private String          currentQue              ;
@@ -101,11 +102,13 @@ public class SpeechService extends BindBaseService implements Runnable{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                sm.startSpeak(currentQue);
+                if(speak){
+                    sm.startSpeak(currentQue);
+                }
+                sm.doWakeUp();
                 isReadingQue = true;
                 isReadingAns = false;
                 toLog("Question: "+currentQue);
-                toLog("Delay: "+questionDelay+" sec");
                 try {
                     Thread.sleep((long)questionDelay * 1000);
                 } catch (InterruptedException e) {
@@ -121,10 +124,12 @@ public class SpeechService extends BindBaseService implements Runnable{
                     for(String ans : listOfAnswers){
                         isReadingAns =  true;
                         varDelayAns(ans.length());
-                        sm.startSpeak(ans);
+                        if(speak){
+                            sm.startSpeak(ans);
+                        }
                         toLog("Answer: "+ans);
                         try {
-                            Thread.sleep((long)answerDelay * 1000);
+                            Thread.currentThread().sleep((long)answerDelay * 1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -153,6 +158,7 @@ public class SpeechService extends BindBaseService implements Runnable{
                     }
                 }
                 isSleeping = false;
+                sm.doSleep();
             }
         }
 
@@ -191,11 +197,13 @@ public class SpeechService extends BindBaseService implements Runnable{
     public void varDelayQue(int countW) {
 //        toLog("word count: "+countW);
         questionDelay = (countW * 0.2938) + 2;
+        toLog("Delay: "+questionDelay+" sec");
     }
 
     public void varDelayAns(int countC) {
 //        toLog("word count: "+countC);
-        answerDelay = (countC * 0.0626) + 1;
+        answerDelay = (countC * 0.065) + 2.2;
+        toLog("Delay: "+answerDelay+" sec");
     }
 
     public void toLog(String msg) {

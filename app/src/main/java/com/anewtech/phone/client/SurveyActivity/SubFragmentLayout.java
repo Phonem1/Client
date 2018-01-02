@@ -50,7 +50,7 @@ public class SubFragmentLayout
         extends TopBaseActivity
         implements QuestionFragment.OnQuestionPass {
 
-    private final static boolean LOG_ON_ACTIVITY_LIFECYCLE = false;
+    private final static boolean LOG_ON_ACTIVITY_LIFECYCLE = true;
 
     private EventBus myevent = EventBus.getDefault();
 
@@ -322,6 +322,10 @@ public class SubFragmentLayout
                 }
                 answerListener(answ);
                 toLog(String.valueOf(answ.size()));
+
+                for(String str : answ){
+                    toLog("SFL: answer - "+str);
+                }
             }
         }
     };

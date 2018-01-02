@@ -79,7 +79,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
 
     private SurveyBervice brain;
     private SpeechManager sm;
-    private int totalScore;
+    private int score, totalScore;
     private boolean isNextQn, reading, nextLayer = false;
 
     private EventBus myevent = EventBus.getDefault();
@@ -166,6 +166,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         }.start();
 
         initSpeechListener();
+        updateScore(0);
     }
 
     @Override
@@ -264,11 +265,10 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         String inputAnsId;
         for(Answernaire a : mquest.answers){
             int seq = a.id;
-            Log.e("FL290", "position: "+position+"  seq: "+seq);
             if(position == seq){
                 inputAnsId = a.answerid;
                 isAnsCorrect.add(1, inputAnsId);
-                Log.e("FL293", "input answer id: "+inputAnsId);
+
                 getObservable(isAnsCorrect)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -279,6 +279,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         //Toast.makeText(this, "FragmentLayout: " + "is Last question", Toast.LENGTH_SHORT).show();
         restartTimer();
         if(this.brain.isLastQuestion()) {
+            speechService.speak = false;
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -305,6 +306,8 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
                 }
             }, 5000);
 
+        }else{
+            speechService.speak = true;
         }
 
         this.brain.nextQuestion();
@@ -343,8 +346,6 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         };
     }
 
-    private int score;
-
     public void updateScore(int value){
         switch (value){
             case 1:{
@@ -355,7 +356,6 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
                 score = 0;
             }
         }
-        Log.e("FL349", "Score = "+score);
     }
 
     public String getFinalScore(){

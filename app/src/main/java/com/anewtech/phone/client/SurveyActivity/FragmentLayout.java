@@ -245,6 +245,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         //Toast.makeText(this, "FragmentLayout: " + "is Last question", Toast.LENGTH_SHORT).show();
         restartTimer();
         if(this.brain.isLastQuestion()) {
+            speechService.speak = false;
             Thanks.setTopColorRes(R.color.Mahogany)
                     .setIcon(R.drawable.ic_sentiment_very_satisfied_black_48dp)
                     .setTitle("Hey you!")
@@ -266,6 +267,8 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
                 }
             }, 5000);
 
+        }else{
+            speechService.speak = true;
         }
 
         if(answer.sub){
@@ -408,7 +411,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
 //                Toast.makeText(this, mytext.answer, Toast.LENGTH_SHORT).show();
                 answ.add(mytext.answer)  ;
             }
-            Log.e("xxx", "[FragmentLayout] nextLayer: "+nextLayer);
+//            Log.e("xxx", "[FragmentLayout] nextLayer: "+nextLayer);
             if(!nextLayer){
                 speechService.setAnsList(answ);
             }
@@ -438,14 +441,14 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
             Bundle b = intent.getExtras();
             boolean isReading = b.getBoolean("isItReading");
             reading = isReading;
-            Log.e("xxx", "[FragmentLayout] Reading: "+isReading);
+//            Log.e("xxx", "[FragmentLayout] Reading: "+isReading);
         }
     }
 
     public void passBoolean(boolean passBoolean){
-        Log.e("xxx", "[FragmentLayout] PassBoolean: "+passBoolean);
+//        Log.e("xxx", "[FragmentLayout] PassBoolean: "+passBoolean);
         this.nextLayer = passBoolean;
-        Log.e("xxx", "[FragmentLayout] PassedNextLayer: "+nextLayer);
+//        Log.e("xxx", "[FragmentLayout] PassedNextLayer: "+nextLayer);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.anewtech.phone.client.SurveyActivity.Services;
 
+import android.arch.persistence.room.util.StringUtil;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -27,6 +28,7 @@ public class SpeechService extends BindBaseService implements Runnable{
     private boolean         isReadingAns    = false ;
     private boolean         isReadingQue    = false ;
     private boolean         isSleeping      = false ;
+    public  boolean         speak           = true  ;
     private double          questionDelay   = 0     ;
     private double          answerDelay     = 0     ;
     private String          currentQue              ;
@@ -101,7 +103,9 @@ public class SpeechService extends BindBaseService implements Runnable{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                sm.startSpeak(currentQue);
+                if(speak){
+                    sm.startSpeak(currentQue);
+                }
                 isReadingQue = true;
                 isReadingAns = false;
                 toLog("Question: "+currentQue);
@@ -121,10 +125,13 @@ public class SpeechService extends BindBaseService implements Runnable{
                     for(String ans : listOfAnswers){
                         isReadingAns =  true;
                         varDelayAns(ans.length());
-                        sm.startSpeak(ans);
+                        toLog("ans.length: "+ans.length());
+                        if(speak){
+                            sm.startSpeak(ans);
+                        }
                         toLog("Answer: "+ans);
                         try {
-                            Thread.sleep((long)answerDelay * 1000);
+                            Thread.currentThread().sleep((long)answerDelay * 1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -185,12 +192,11 @@ public class SpeechService extends BindBaseService implements Runnable{
         ArrayList<String> words = new ArrayList<>(Arrays.asList(sentence.split(" ")));
         int count = words.size();
         varDelayQue(count);
-
     }
 
     public void varDelayQue(int countW) {
 //        toLog("word count: "+countW);
-        questionDelay = (countW * 0.2938) + 2;
+        questionDelay = (countW * 0.2938) + 3;
     }
 
     public void varDelayAns(int countC) {

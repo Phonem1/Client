@@ -42,8 +42,10 @@ public class AnswersFragment extends Fragment implements FragmentLayout.SendData
     private GridView gv;
     private EventBus myevent = EventBus.getDefault();
     private List<Answernaire> localAnswers = new ArrayList<>();
+    private Questionaire questionaire = new Questionaire();
     private SurveyDataService sds = new SurveyDataService();
 
+    private ArrayList<String> checkAnswer;
     private String[] feedbackNames = {
             "Excellent",
             "Very Good",
@@ -130,6 +132,7 @@ public class AnswersFragment extends Fragment implements FragmentLayout.SendData
         final CommonEvent mevent = event;
 
         localAnswers = mevent.getMessage().answers;
+        questionaire = mevent.getMessage();
 
         gv.setNumColumns(event.getMessage().answers.size());
         CustomButtonAdapter cba = new CustomButtonAdapter(this.getContext(),mevent.getMessage().answers);
@@ -167,6 +170,23 @@ public class AnswersFragment extends Fragment implements FragmentLayout.SendData
 
     @Override   /* Data from FragmentLayout is passed here to perform click action programmatically */
     public void passDataArrayList(ArrayList<String> list, String inputSpeech) {
+        checkAnswer = new ArrayList<>();
+        //Get correct answer id
+        String queid = questionaire.correctAId;
+        checkAnswer.add(0,queid);
+        //Get input answer id
+        String inputAid;
+        for(Answernaire a : localAnswers){
+            if(a.answer.equals(inputSpeech)){
+                inputAid = a.answerid;
+                checkAnswer.add(1,inputAid);
+                getObservable(checkAnswer)
+                        .subscribeOn(Schedulers.io())   //Read on background
+                        .observeOn(AndroidSchedulers.mainThread())  //Be notified on main thread
+                        .subscribe(getAnsObserver());
+            }
+        }
+
         Toast.makeText(getContext(),""+inputSpeech,Toast.LENGTH_SHORT).show();
         answerLoop:
         for (int i = 0; i < list.size(); i++) {
@@ -177,37 +197,25 @@ public class AnswersFragment extends Fragment implements FragmentLayout.SendData
             }
         }
         toLog("inputSpeech: "+inputSpeech);
-
-        String inputAid;
-        for(Answernaire a : localAnswers){
-            if(a.answer.equals(inputSpeech)){
-                inputAid = a.answerid;
-                getObservable(inputAid)
-                        .subscribeOn(Schedulers.io())   //Read on background
-                        .observeOn(AndroidSchedulers.mainThread())  //Be notified on main thread
-                        .subscribe(getAnsObserver());
-            }
-        }
     }
 
-    private Observable<String> getObservable(String input){
+    private Observable<ArrayList<String>> getObservable(ArrayList<String> input){
         return Observable.just(input);
     }
 
-    private Observer<String> getAnsObserver(){
-        return new Observer<String>() {
+    private Observer<ArrayList<String>> getAnsObserver(){
+        return new Observer<ArrayList<String>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(String inputAid) {
-                for(Questionaire q : sds.getFirstLayerQuestionaire()){
-                    String queId = q.correctAId;
-                    if(queId.equals(inputAid)){
-                        updateScore();
-                    }
+            public void onNext(ArrayList<String> isAnswerCorrect) {
+                String ansId = isAnswerCorrect.get(0);
+                String inpId = isAnswerCorrect.get(1);
+                if(ansId.equals(inpId)){
+                    fragmentLayout.updateScore(1);
                 }
             }
 
@@ -221,16 +229,6 @@ public class AnswersFragment extends Fragment implements FragmentLayout.SendData
 
             }
         };
-    }
-
-    private int score;
-
-    public void updateScore(){
-        score = score + 1;
-    }
-
-    public int getScore(){
-        return score;
     }
 
     public List<Answernaire> getanswersFromFragment(){

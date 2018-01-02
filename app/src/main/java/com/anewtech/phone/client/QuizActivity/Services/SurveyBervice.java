@@ -12,6 +12,10 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+
 /**
  * Created by heriz on 26/12/2017.
  */
@@ -33,11 +37,6 @@ public class SurveyBervice {
         this.sds = new SurveyDataService();
         this.srs = new SurveyReportService();
     }
-
-//    public SurveyBervice(FragmentActivity activity) {
-//        this.sds = new SurveyDataService(activity);
-//        this.srs = new SurveyReportService();
-//    }
 
     public void loadJsonData(String myjson){
         this.sds.setJson(myjson);
