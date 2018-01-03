@@ -32,7 +32,7 @@ public class MainActivity extends TopBaseActivity {
             setContentView(R.layout.splash);
             mViewModel.initialSplash = false;
             handler = new Handler();
-            handler.postDelayed(menuActivity(), 10009);
+            handler.postDelayed(menuActivity(), 1000);
         }else{
             setLayout("menu");
         }

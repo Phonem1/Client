@@ -211,7 +211,7 @@
   "layerslastmessages": [
     {
       "id": "001",
-      "message": "Great job completing the quiz",
+      "message": "Great job completing the quiz. ",
       "templateid": "001",
       "answerid": "",
       "seq": "0",
@@ -219,7 +219,7 @@
     },
     {
       "id": "002",
-      "message": "Have a great day",
+      "message": "Have a great day. ",
       "templateid": "001",
       "answerid": "",
       "seq": "1",
@@ -227,7 +227,7 @@
     },
     {
       "id": "003",
-      "message": "You are awesome",
+      "message": "You are awesome. ",
       "templateid": "001",
       "answerid": "",
       "seq": "2",

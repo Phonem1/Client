@@ -28,10 +28,12 @@ public class SpeechService extends BindBaseService implements Runnable{
     private boolean         isReadingAns    = false ;
     private boolean         isReadingQue    = false ;
     private boolean         isSleeping      = false ;
+    public  boolean         doThankYou      = false ;
     public  boolean         speak           = true  ;
     private double          questionDelay   = 0     ;
     private double          answerDelay     = 0     ;
     private String          currentQue              ;
+    private String          thankYouMsg             ;
     private ArrayList<String> listOfAnswers         ;
     private Thread          thread                  ;
 
@@ -98,6 +100,10 @@ public class SpeechService extends BindBaseService implements Runnable{
         {                     // 20 secs delay before reset
             if(currentQue!=null ){
 //                sm.doSleep();
+                if(doThankYou){
+                    sm.startSpeak(thankYouMsg);
+                    doThankYou = false;
+                }
                 try {
                     Thread.sleep(1000); // This delay is to let boolean 'isReadingAns' pass through first before qn being read
                 } catch (InterruptedException e) {
@@ -186,6 +192,10 @@ public class SpeechService extends BindBaseService implements Runnable{
     public void setAnsList(ArrayList<String> answers) {
         listOfAnswers = new ArrayList<>();
         listOfAnswers = answers;
+    }
+
+    public void setThankYouMsg(String msg) {
+        thankYouMsg = msg;
     }
 
     public void wordCount(String sentence) {

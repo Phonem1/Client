@@ -285,12 +285,15 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    String msg = thankyouguys.get(doRandom(thankyouguys.size())).message
-                            +"\nYou got "+"<b>"+getFinalScore()+"</b>"+" questions right!";
+                    String thxMsg = thankyouguys.get(doRandom(thankyouguys.size())).message;
+                    String msg = thxMsg+"\nYou got "+getFinalScore()+" questions right!";
+                    String htmlMsg = thxMsg+"\nYou got "+"<b>"+getFinalScore()+"</b>"+" questions right!";
+                    speechService.doThankYou = true;
+                    speechService.setThankYouMsg(msg);
                     Thanks.setTopColorRes(R.color.Mahogany)
                             .setIcon(R.drawable.ic_sentiment_very_satisfied_black_48dp)
                             .setTitle("Hey you!")
-                            .setMessage(Html.fromHtml(msg))
+                            .setMessage(Html.fromHtml(htmlMsg))
                             .setPositiveButton("I sure did!", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -307,7 +310,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
                     Thanks.dismiss();
                     finish();
                 }
-            }, 5000);
+            }, 6000);
 
         }else{
             speechService.speak = true;
@@ -365,7 +368,7 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
     }
 
     public String getFinalScore(){
-        return String.valueOf(score+"/"+totalScore);
+        return score+" out of "+totalScore;
     }
     private void restartTimer() {
         timer.cancel();

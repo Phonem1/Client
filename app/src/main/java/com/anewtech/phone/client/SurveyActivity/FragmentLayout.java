@@ -246,10 +246,13 @@ public class FragmentLayout extends TopBaseActivity implements FragmentToActivit
         restartTimer();
         if(this.brain.isLastQuestion()) {
             speechService.speak = false;
+            String msg = thankyouguys.get(doRandom(thankyouguys.size())).message;
+            speechService.doThankYou = true;
+            speechService.setThankYouMsg(msg);
             Thanks.setTopColorRes(R.color.Mahogany)
                     .setIcon(R.drawable.ic_sentiment_very_satisfied_black_48dp)
                     .setTitle("Hey you!")
-                    .setMessage(thankyouguys.get(doRandom(thankyouguys.size())).message)
+                    .setMessage(msg)
                     .setPositiveButton("I sure did!", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
